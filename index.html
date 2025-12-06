@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CrazyUX | Upside Down</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/png" href="https://ui-avatars.com/api/?name=CUX&background=e0e5ec&color=555&size=200">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&family=Fira+Code:wght@400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+
+    <main class="content-wrapper">
+        <header class="inverted-footer neumorphic-box">
+            <div class="footer-content">
+                <h3>CrazyUX Inc.</h3>
+                <div class="social-links">
+                    <button class="social-btn"><i class="fa-brands fa-twitter"></i></button>
+                    <button class="social-btn"><i class="fa-brands fa-instagram"></i></button>
+                    <button class="social-btn"><i class="fa-brands fa-dribbble"></i></button>
+                </div>
+                <p class="small-text">Designed with <i class="fa-solid fa-heart" style="color: #ff6b6b;"></i> and
+                    confusion.</p>
+            </div>
+        </header>
+
+
+        <section class="collab-section" style="margin-bottom: 100px;">
+
+            <div class="neu-card step-card">
+                <div class="step-badge">!</div>
+                <h3>Issues & Conduct</h3>
+                <p>Before you leave:</p>
+                <ul style="margin-left: 20px; color: #666; font-size: 0.9rem; line-height: 1.6;">
+                    <li><i class="fa-solid fa-bug"></i> <strong>Found a bug?</strong> Open an Issue with reproduction
+                        steps.</li>
+                    <li><i class="fa-solid fa-heart"></i> <strong>Be Kind:</strong> Harassment is not cool. Constructive
+                        criticism only.</li>
+                    <li><i class="fa-solid fa-check-double"></i> <strong>Review:</strong> We usually review PRs within
+                        2-3 days.</li>
+                </ul>
+            </div>
+
+            <div class="neu-card step-card">
+                <div class="step-badge">5</div>
+                <h3>Push & Pull Request</h3>
+                <p>Send your code to your forked repository, then go to GitHub and click "Compare & Pull Request".</p>
+                <div class="code-block">
+                    <p class="comment"># Push the branch to your fork</p>
+                    <p>git push origin feature/my-cool-project</p>
+                </div>
+                <p style="margin-top: 15px; font-size: 0.9rem;"><strong>Tip:</strong> In the PR description, include
+                    screenshots and link related issues.</p>
+            </div>
+
+            <div class="neu-card step-card">
+                <div class="step-badge">4</div>
+                <h3>Commit Changes</h3>
+                <p>Save your changes to the history. Use a descriptive message explaining what you built.</p>
+                <div class="code-block">
+                    <p class="comment"># Stage all files</p>
+                    <p>git add .</p>
+                    <p class="comment"># Commit with a clear message</p>
+                    <p>git commit -m "feat: added a calculator in projects folder"</p>
+                </div>
+            </div>
+
+            <div class="neu-card step-card">
+                <div class="step-badge">3</div>
+                <h3>Make Changes</h3>
+                <p>Create your own folder inside <code>projects/</code>. Follow the structure below to keep the site
+                    clean.</p>
+
+                <div class="file-tree neumorphic-inset" style="margin-bottom: 20px;">
+                    <ul>
+                        <li><i class="fa-solid fa-folder-open"></i> CrazyUX/</li>
+                        <li>
+                            <ul>
+                                <li><i class="fa-solid fa-folder"></i> css/ <span class="comment">(style.css)</span>
+                                </li>
+                                <li><i class="fa-solid fa-folder"></i> js/ <span class="comment">(script.js)</span></li>
+                                <li class="highlight-folder"><i class="fa-solid fa-folder-plus"></i> projects/ <span
+                                        class="badge">YOUR WORK HERE</span></li>
+                                <li>
+                                    <ul class="nested-projects">
+                                        <li class="new-project"><i class="fa-solid fa-folder"></i> [your-project-name]/
+                                        </li>
+                                        <li>
+                                            <ul>
+                                                <li><i class="fa-brands fa-html5"></i> index.html</li>
+                                                <li><i class="fa-brands fa-css3-alt"></i> style.css</li>
+                                                <li><i class="fa-brands fa-js"></i> script.js</li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li><i class="fa-brands fa-html5"></i> about.html</li>
+                                <li><i class="fa-brands fa-html5"></i> index.html</li>
+                                <li><i class="fa-brands fa-html5"></i> pages.html</li>
+                                <li><i class="fa-solid fa-book"></i> README.md</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+                <p>Command line usage for creating your folder:</p>
+                <div class="code-block">
+                    <p class="comment"># Create your project folder</p>
+                    <p>mkdir projects/my-cool-project</p>
+                    <p class="comment"># Create your files</p>
+                    <p>touch projects/my-cool-project/index.html</p>
+                </div>
+            </div>
+
+            <div class="neu-card step-card">
+                <div class="step-badge">2</div>
+                <h3>Create a Branch</h3>
+                <p>Never work directly on the <code>main</code> branch. Isolate your features in a new branch.</p>
+                <div class="code-block">
+                    <p class="comment"># Create and switch to a new branch</p>
+                    <p>git checkout -b feature/my-cool-project</p>
+                </div>
+                <p style="margin-top: 15px; font-size: 0.9rem;"><strong>Naming:</strong> Use <code>feature/name</code>
+                    for new stuff or <code>fix/issue</code> for bugs.</p>
+            </div>
+
+            <div class="neu-card step-card">
+                <div class="step-badge">1</div>
+                <h3>Fork & Clone</h3>
+                <p>First, click the "Fork" button on GitHub to make a copy. Then, clone <strong>your</strong> version to
+                    your computer.</p>
+                <div class="code-block">
+                    <p class="comment"># Clone your forked repository</p>
+                    <p>git clone https://github.com/YOUR-USERNAME/website.git</p>
+                    <p class="comment"># Enter the directory</p>
+                    <p>cd website</p>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 20px;">
+                <h2 class="section-title">How to Collaborate</h2>
+                <p style="color: #888; margin-bottom: 20px;">Scroll up to see the steps 👆</p>
+            </div>
+
+        </section>
+
+
+        <section class="card-grid-section">
+
+            <div class="grid-container">
+                <div class="neu-card">
+                    <div class="icon-box"><i class="fa-solid fa-face-grin-beam-sweat"></i></div>
+                    <h3>Crazy UX Pages</h3>
+                    <p>Explore a collection of intentionally chaotic, humorous, and unexpected user experience designs.
+                    </p>
+                </div>
+
+                <div class="neu-card">
+                    <div class="icon-box"><i class="fa-solid fa-flask"></i></div>
+                    <h3>UX Experiments</h3>
+                    <p>Dive into experimental layouts, unusual interactions, and wild design concepts that break the
+                        rules.</p>
+                </div>
+
+                <div class="neu-card">
+                    <div class="icon-box"><i class="fa-solid fa-clone"></i></div>
+                    <h3>Page Variants</h3>
+                    <p>View multiple themed pages, each with its own creative twist, style, and behavior.</p>
+                </div>
+
+                <div class="neu-card">
+                    <div class="icon-box"><i class="fa-solid fa-code"></i></div>
+                    <h3>Open Source Codebase</h3>
+                    <p>Access the full project on GitHub, study the implementation, and help enhance the CrazyYUX
+                        ecosystem.</p>
+                </div>
+
+                <div class="neu-card">
+                    <div class="icon-box"><i class="fa-solid fa-handshake-angle"></i></div>
+                    <h3>Contribution Workflow</h3>
+                    <p>Fork, branch, commit, and submit PRs to add new pages, improve designs, or fix wacky behaviors.
+                    </p>
+                </div>
+
+                <div class="neu-card">
+                    <div class="icon-box"><i class="fa-solid fa-users"></i></div>
+                    <h3>Community & Support</h3>
+                    <p>Join a fun community of designers and developers building the wildest UX ideas together.</p>
+                </div>
+            </div>
+
+
+            <div class="bottom-spacer"></div>
+            <h2 class="section-title">Explore the Madness</h2>
+        </section>
+
+        <section class="hero-section">
+            <div class="hero-container neumorphic-box">
+                <h1 class="logo-text">CrazyUX</h1>
+                <p class="subtitle">Where Creativity Turns Wild</p>
+                <a href="projects.html">
+                    <button class="neu-btn">Start Exploring</button>
+                </a>
+
+            </div>
+        </section>
+
+    </main>
+
+    <nav class="bottom-nav">
+        
+        <ul class="nav-list neumorphic-pill">
+            <li class="nav-item active">
+                <a href="index.html"><i class="fa-solid fa-house"></i><span>Home</span></a>
+            </li>
+            <li class="nav-item">
+                <a href="projects.html"><i class="fa-solid fa-layer-group"></i><span>Projects</span></a>
+            </li>
+            <li class="nav-item">
+                <a href="about.html"><i class="fa-solid fa-circle-info"></i><span>About</span></a>
+            </li>
+            <!-- <li class="nav-item">
+                <a href="#"><i class="fa-solid fa-calendar-day"></i><span>Event</span></a>
+            </li>
+            <li class="nav-item">
+                <a href="#"><i class="fa-solid fa-envelope"></i><span>Contact</span></a>
+            </li> -->
+        </ul>
+    </nav>
+
+    <script src="js/script.js"></script>
+</body>
+
+</html>
