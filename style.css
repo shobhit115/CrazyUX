@@ -383,7 +383,7 @@ body {
 /* Active State (Current Page) */
 .page-btn.active {
     color: #fff;
-    background: #007bff; /* Or your site's accent color */
+    background: var(--shadow-dark); /* Or your site's accent color */
     box-shadow: inset 3px 3px 6px rgba(0,0,0,0.2);
 }
 
