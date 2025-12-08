@@ -318,6 +318,81 @@ body {
     text-decoration: none;
     align-self: flex-start;
 }
+/* Container to hold both buttons side-by-side */
+.card-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Pushes buttons to edges, or use 'gap' for closeness */
+    gap: 15px;
+    margin-top: 15px;
+}
+
+/* Specific style for the "View Code" link */
+.code-link {
+    font-size: 0.9rem;
+    color: #666; /* Subtle color */
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.3s ease;
+}
+
+.code-link i {
+    font-size: 1.1rem;
+}
+
+.code-link:hover {
+    color: #000; /* Darker on hover */
+    transform: scale(1.05);
+}
+
+/* Pagination Container */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 40px;
+}
+
+/* Base Button Style */
+.page-btn {
+    background: #e0e5ec;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-family: inherit;
+    font-weight: 600;
+    color: #4a5568;
+    cursor: pointer;
+    box-shadow: 
+        5px 5px 10px #bebebe, 
+        -5px -5px 10px #ffffff;
+    transition: all 0.2s ease;
+}
+
+/* Hover Effect */
+.page-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 
+        6px 6px 12px #bebebe, 
+        -6px -6px 12px #ffffff;
+}
+
+/* Active State (Current Page) */
+.page-btn.active {
+    color: #fff;
+    background: #007bff; /* Or your site's accent color */
+    box-shadow: inset 3px 3px 6px rgba(0,0,0,0.2);
+}
+
+/* Disabled State (First/Last page buttons) */
+.page-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    box-shadow: none;
+}
 
 /* --- ADD TO BOTTOM OF style.css --- */
 
