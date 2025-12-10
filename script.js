@@ -39,7 +39,7 @@ const projectsData = [
         title: "Chaos Jump Dino",
         image: "Projects\\dino\\dino.gif",
         description: "The Button: It teleports instantly upon clicking.",
-        link: "CrazyUX\\Projects\\dino\\index.html",
+        link: "https://shobhit115.github.io/CrazyUX/Projects/dino/index.html",
         repo: "https://github.com/shobhit115/CrazyUX/tree/main/Projects/dino"
     },
     {
