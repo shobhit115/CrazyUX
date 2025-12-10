@@ -39,8 +39,8 @@ const projectsData = [
         title: "Chaos Jump Dino",
         image: "Projects\\dino\\dino.gif",
         description: "The Button: It teleports instantly upon clicking.",
-        link: "\\Projects\\dino\\index.html",
-        repo: "https://github.com/GoulartNogueira/BadUI"
+        link: "CrazyUX\\Projects\\dino\\index.html",
+        repo: "https://github.com/shobhit115/CrazyUX/tree/main/Projects/dino"
     },
     {
         title: "Birth Selector",
