@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Whack-a-Bug IDE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="ide-container">
+        <div class="sidebar">
+            <div class="sidebar-item active">EXPLORER</div>
+            <div class="sidebar-item">SEARCH</div>
+            <div class="sidebar-item">SOURCE CONTROL</div>
+            <div class="sidebar-item">DEBUG</div>
+        </div>
+
+        <div class="main-editor">
+            <div class="status-bar">
+                <div class="file-tab">index.js <span class="unsaved-dot">●</span></div>
+                <div class="game-stats">
+                   <span>Found Errors: <span id="score" class="highlight-green">0</span></span>
+                   <span>Time To Crash: <span id="time-left" class="highlight-blue">30</span>s</span>
+                </div>
+            </div>
+
+            <div id="game-board" class="code-area">
+                <pre class="code-bg">
+function initiateSystem() {
+  console.log("System starting...");
+  // TODO: Fix memory leak here
+  let criticalProcess = true;
+  try {
+     startKernel();
+  } catch (e) {
+     // ERROR HANDLER BROKEN
+  }
+}
+                </pre>
+            </div>
+        </div>
+
+        <div id="overlay" class="overlay center-flex">
+            <div class="terminal-window">
+                <div class="terminal-header"> Let's Debug! </div>
+                <div class="terminal-body">
+                    <p>> SYSTEM STATUS: CRITICAL</p>
+                    <p>> Bugs are multiplying in the production codebase.</p>
+                    <p>> TASK: Squash them before the server crashes.</p>
+                    <br>
+                    <h2 id="final-score-display" style="display:none;">> DEPLOYMENT FINISHED. BUGS SQUASHED: <span id="end-score">0</span></h2>
+                    <button id="start-btn">START DEBUGGING SESSION_</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>

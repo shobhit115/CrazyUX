@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Impossible Button</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --text-color: #ffffff;
+            --btn-yes: #00e676; /* Bright Green */
+            --btn-no: #ff1744;  /* Bright Red */
+        }
+
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--bg-color);
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden; /* Vital to prevent scrollbars appearing during movement */
+        }
+
+        h1 {
+            color: var(--text-color);
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 0 20px;
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 20px;
+        }
+
+        button {
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            /* Important: We keep transition for color/transform, but NOT for left/top */
+            transition: transform 0.1s, background-color 0.2s; 
+        }
+
+        #noBtn {
+            background-color: var(--btn-no);
+        }
+
+        #yesBtn {
+            background-color: var(--btn-yes);
+            position: relative; /* Will switch to fixed via JS */
+            z-index: 100;
+        }
+
+        /* Hover effects for aesthetics */
+        button:hover {
+            transform: scale(1.05);
+            opacity: 0.9;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>Do you think U are not stupid?</h1>
+
+    <div class="btn-container">
+        <button id="yesBtn">Yes</button>
+        
+        <button id="noBtn" onclick="alert('I knew it! You are a smart person.')">No</button>
+    </div>
+
+    <script>
+        const yesBtn = document.getElementById('yesBtn');
+
+        // Function to move the button to a random spot
+        function moveButton() {
+            // Get the view width and height
+            const x = Math.random() * (window.innerWidth - yesBtn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - yesBtn.offsetHeight);
+
+            // Switch to fixed to allow movement anywhere on screen
+            yesBtn.style.position = 'fixed';
+            yesBtn.style.left = `${x}px`;
+            yesBtn.style.top = `${y}px`;
+        }
+
+        // --- DESKTOP LOGIC ---
+        // Mouseover triggers instantly when cursor touches the element
+        yesBtn.addEventListener('mouseover', moveButton);
+
+        // --- MOBILE LOGIC ---
+        // 'touchstart' fires the moment a finger touches the screen.
+        yesBtn.addEventListener('touchstart', (e) => {
+            // CRITICAL: e.preventDefault() stops the browser from interpreting 
+            // the touch as a "click". The button moves, and the click never happens.
+            e.preventDefault(); 
+            moveButton();
+        });
+
+        // --- CLICK LOGIC (Just in case) ---
+        // If they use the 'Tab' key to highlight and press Enter, this catches it.
+        yesBtn.addEventListener('click', () => {
+             moveButton(); // Even if clicked via keyboard, it runs away!
+             // alert("You caught me!"); // Uncomment this if you want it to be winnable eventually
+        });
+
+    </script>
+</body>
+</html>

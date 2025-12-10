@@ -1,0 +1,194 @@
+/* --- Reset & Base Theme --- */
+:root {
+    --bg-dark: #1e1e1e; /* VSCode background */
+    --bg-darker: #252526; /* Sidebar background */
+    --text-gray: #cccccc;
+    --accent-blue: #007acc;
+    --accent-green: #4caf50;
+    --bug-red: #f44336;
+    --font-stack: 'Fira Code', monospace;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    user-select: none; /* Prevents highlighting text while frantically clicking */
+}
+
+body {
+    height: 100vh;
+    background-color: #121212;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: var(--font-stack);
+    color: var(--text-gray);
+    overflow: hidden;
+}
+
+/* --- IDE Layout Structure --- */
+.ide-container {
+    width: 900px;
+    height: 650px;
+    background-color: var(--bg-dark);
+    display: flex;
+    border: 1px solid #333;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    position: relative;
+}
+
+.sidebar {
+    width: 60px;
+    background-color: var(--bg-darker);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+    color: #555;
+    font-size: 0.8rem;
+}
+
+.sidebar-item {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    padding: 20px 0;
+    cursor: pointer;
+}
+
+.sidebar-item.active { color: var(--text-gray); border-right: 2px solid var(--accent-blue); }
+
+.main-editor {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+/* --- Top Status Bar --- */
+.status-bar {
+    height: 40px;
+    background-color: var(--bg-darker);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    border-bottom: 1px solid #333;
+    font-size: 0.9rem;
+}
+
+.file-tab { background: var(--bg-dark); padding: 8px 15px; border-top: 2px solid var(--accent-blue); }
+.unsaved-dot { color: var(--accent-blue); }
+.game-stats { display: flex; gap: 20px; }
+.highlight-green { color: var(--accent-green); font-weight: bold; }
+.highlight-blue { color: var(--accent-blue); font-weight: bold; }
+
+/* --- Game Board Area --- */
+.code-area {
+    flex-grow: 1;
+    position: relative; /* Crucial for absolute positioning of bugs */
+    padding: 20px;
+    overflow: hidden;
+    cursor: crosshair; /* Changes cursor to target */
+}
+
+.code-bg {
+    opacity: 0.1; /* Faint background code */
+    pointer-events: none;
+    color: #555;
+}
+
+/* --- THE BUGS --- */
+.bug {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background-color: var(--bug-red);
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    color: white;
+    box-shadow: 0 0 15px var(--bug-red);
+    cursor: pointer;
+    /* Animation on spawn */
+    animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* Use a pseudo-element for a simple bug icon look */
+.bug::before { content: 'BUG'; font-size: 0.8rem; }
+
+.bug:hover { transform: scale(1.1); }
+
+/* State when clicked */
+.bug.patched {
+    background-color: var(--accent-green) !important;
+    box-shadow: 0 0 20px var(--accent-green);
+    pointer-events: none; /* Cannot click twice */
+    animation: patchSuccess 0.5s forwards;
+}
+.bug.patched::before { content: 'PATCHED'; font-size: 0.7rem; }
+
+/* State when missed (timed out) */
+.bug.missed {
+    opacity: 0.5;
+    transform: scale(0.8);
+    transition: all 0.3s;
+}
+
+
+/* --- Overlay & Terminal UI --- */
+.overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.85);
+    z-index: 100;
+    backdrop-filter: blur(2px);
+}
+.center-flex { display: flex; justify-content: center; align-items: center; }
+
+.terminal-window {
+    width: 80%;
+    max-width: 500px;
+    background: #000;
+    border: 2px solid #333;
+    box-shadow: 0 10px 30px #000;
+}
+
+.terminal-header {
+    background: #333;
+    padding: 5px 10px;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.terminal-body { padding: 30px; color: var(--accent-green); }
+.terminal-body p { margin-bottom: 10px; }
+
+#start-btn {
+    margin-top: 20px;
+    width: 100%;
+    padding: 15px;
+    background: transparent;
+    border: 2px solid var(--accent-green);
+    color: var(--accent-green);
+    font-family: var(--font-stack);
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+#start-btn:hover { background: var(--accent-green); color: #000; }
+
+/* --- Animations --- */
+@keyframes popIn {
+    0% { transform: scale(0) rotate(45deg); opacity: 0; }
+    100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+@keyframes patchSuccess {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(0); opacity: 0; }
+}

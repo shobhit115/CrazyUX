@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Chaos Jump Dino</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f7f7f7;
+            font-family: 'Press Start 2P', cursive;
+            overflow: hidden; /* Prevent scrolling */
+            user-select: none;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #game-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; /* Keep button inside */
+        }
+
+        canvas {
+            border-bottom: 2px solid #535353;
+            background-color: transparent;
+            max-width: 800px;
+            width: 95%; /* Responsive width padding */
+            height: 300px; /* Fixed height for consistency */
+        }
+
+        /* The Chaos Button */
+        #jump-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 15px 30px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 16px;
+            background-color: #ff4757;
+            color: white;
+            border: 4px solid #2f3542;
+            box-shadow: 4px 4px 0px #2f3542;
+            cursor: pointer;
+            z-index: 100;
+            transition: transform 0.05s; /* Faster visual feedback */
+            text-transform: uppercase;
+            touch-action: none; /* Prevents browser zooming/scrolling on rapid taps */
+            -webkit-tap-highlight-color: transparent; /* Removes mobile tap highlight */
+        }
+
+        #jump-btn:active {
+            transform: translate(-50%, -50%) scale(0.95);
+            box-shadow: 2px 2px 0px #2f3542;
+        }
+
+        /* UI overlays */
+        .ui-text {
+            position: absolute;
+            color: #535353;
+            text-align: center;
+            pointer-events: none; /* Let clicks pass through text */
+        }
+
+        #score-board {
+            top: 20px;
+            right: 20px;
+            font-size: 20px;
+        }
+
+        #message-area {
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 14px;
+            color: #ff6b81;
+            display: none;
+            width: 80%;
+            text-align: center;
+        }
+
+        #game-over-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 150; /* Above everything */
+            display: none;
+        }
+
+        h1 { font-size: 24px; margin-bottom: 20px; color: #535353; text-align: center; }
+        p { color: #7f8c8d; font-size: 12px; line-height: 1.5; text-align: center; max-width: 400px; padding: 0 20px;}
+        
+        #final-score-display {
+            font-size: 24px;
+            color: #2f3542;
+            margin: 10px 0 30px 0;
+        }
+
+        /* Restart Button */
+        #restart-btn {
+            padding: 15px 30px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 14px;
+            background-color: #2f3542;
+            color: white;
+            border: 4px solid #535353;
+            box-shadow: 4px 4px 0px #535353;
+            cursor: pointer;
+            text-transform: uppercase;
+            margin-top: 20px;
+            transition: all 0.1s;
+        }
+
+        #restart-btn:hover {
+            background-color: #57606f;
+        }
+
+        #restart-btn:active {
+            transform: scale(0.95);
+            box-shadow: 2px 2px 0px #535353;
+        }
+
+        /* Warning flash for Chaos Mode */
+        @keyframes flash {
+            0% { background-color: #f7f7f7; }
+            50% { background-color: #ffeaa7; }
+            100% { background-color: #f7f7f7; }
+        }
+        .chaos-active {
+            animation: flash 1s infinite;
+        }
+
+        /* Mobile Responsive Adjustments */
+        @media (max-width: 600px) {
+            canvas { height: 250px; } /* Smaller canvas height on mobile */
+            #score-board { font-size: 14px; top: 10px; right: 10px; }
+            #jump-btn { padding: 12px 20px; font-size: 14px; }
+            h1 { font-size: 20px; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="game-container">
+        <canvas id="gameCanvas"></canvas>
+        
+        <div id="score-board">HI 00000 00000</div>
+        
+        <div id="message-area">SPACEBAR DISABLED! USE THE BUTTON!</div>
+
+        <!-- The Chaos Button -->
+        <button id="jump-btn">JUMP!</button>
+
+        <div id="game-over-screen">
+            <h1>GAME OVER</h1>
+            <div id="final-score-display">SCORE: 0</div>
+            <p>Your fingers were not fast enough.</p>
+            <button id="restart-btn">TRY AGAIN</button>
+        </div>
+    </div>
+
+    <script>
+        // --- Configuration ---
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const jumpBtn = document.getElementById('jump-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        const scoreBoard = document.getElementById('score-board');
+        const messageArea = document.getElementById('message-area');
+        const gameOverScreen = document.getElementById('game-over-screen');
+        const container = document.getElementById('game-container');
+        const finalScoreDisplay = document.getElementById('final-score-display');
+
+        // Logic constants
+        let gameSpeed = 6;
+        
+        // PHYSICS TWEAK: Heavier gravity and stronger jump for "snappy" feel
+        const GRAVITY = 1.2; 
+        const JUMP_STRENGTH = -15; 
+        
+        const CHAOS_THRESHOLD = 500; // Score at which auto-move starts
+        const AUTO_MOVE_INTERVAL = 2000; // ms
+
+        // State
+        let isPlaying = false;
+        let isGameOver = false;
+        let score = 0;
+        let highScore = 0;
+        let frame = 0;
+        let chaosInterval = null;
+        let isChaosMode = false;
+
+        // --- ASSETS (SVGs) ---
+        const dinoImg = new Image();
+        dinoImg.src = "data:image/svg+xml," + encodeURIComponent(`
+            <svg width="140" height="140" xmlns="http://www.w3.org/2000/svg">
+              <g fill="#535353">
+                <rect x="55" y="10" width="40" height="25"/>
+                <rect x="85" y="15" width="10" height="10" fill="white"/> 
+                <rect x="95" y="10" width="30" height="18"/> 
+                <rect x="55" y="35" width="50" height="20"/>
+                <rect x="40" y="55" width="65" height="25"/>
+                <rect x="40" y="80" width="20" height="10"/>
+                <rect x="90" y="45" width="15" height="8"/>
+                <rect x="10" y="65" width="30" height="10"/>
+                <rect x="5" y="60" width="10" height="10"/>
+                <rect x="55" y="90" width="15" height="30"/>
+                <rect x="80" y="90" width="15" height="30"/>
+              </g>
+            </svg>
+        `);
+
+        const cactusImg = new Image();
+        cactusImg.src = "data:image/svg+xml," + encodeURIComponent(`
+            <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
+                <g fill="#535353">
+                    <rect x="40" y="10" width="20" height="90" rx="2"/>
+                    <rect x="10" y="35" width="30" height="12" rx="2"/>
+                    <rect x="10" y="20" width="12" height="20" rx="2"/>
+                    <rect x="60" y="45" width="30" height="12" rx="2"/>
+                    <rect x="78" y="30" width="12" height="20" rx="2"/>
+                </g>
+            </svg>
+        `);
+
+        // Entities
+        let dino = {
+            x: 50,
+            y: 0,
+            width: 44,
+            height: 44,
+            dy: 0,
+            grounded: true,
+            color: '#535353'
+        };
+
+        let obstacles = [];
+
+        // --- Setup Canvas Resolution ---
+        function resizeCanvas() {
+            // Check if mobile via width to adjust height dynamically
+            const isMobile = window.innerWidth < 600;
+            const newHeight = isMobile ? 250 : 300;
+            
+            canvas.width = canvas.parentElement.offsetWidth * 0.95; // 95% width to leave margins
+            canvas.height = newHeight;
+            
+            // Only reset Y if not playing to avoid glitching mid-air during resize
+            if (!isPlaying && !isGameOver) {
+                dino.y = canvas.height - dino.height - 10;
+            } else if (dino.grounded) {
+                // If grounded and resizing, keep grounded
+                dino.y = canvas.height - dino.height - 10;
+            }
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // --- Core Game Functions ---
+
+        function spawnObstacle() {
+            // Random size variation
+            const height = Math.random() > 0.5 ? 40 : 60;
+            const width = Math.random() > 0.5 ? 20 : 30;
+            
+            obstacles.push({
+                x: canvas.width,
+                y: canvas.height - height - 10, // 10 is padding from bottom
+                width: width,
+                height: height,
+                passed: false
+            });
+        }
+
+        function drawDino() {
+            // Draw image instead of rect
+            ctx.drawImage(dinoImg, dino.x, dino.y, dino.width, dino.height);
+        }
+
+        function drawObstacles() {
+            obstacles.forEach(obs => {
+                // Draw image instead of rect
+                ctx.drawImage(cactusImg, obs.x, obs.y, obs.width, obs.height);
+            });
+        }
+
+        function drawGround() {
+            ctx.beginPath();
+            ctx.moveTo(0, canvas.height - 10);
+            ctx.lineTo(canvas.width, canvas.height - 10);
+            ctx.strokeStyle = '#535353';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        }
+
+        function update() {
+            if (!isPlaying) return;
+
+            requestAnimationFrame(update);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            frame++;
+
+            // Physics
+            dino.dy += GRAVITY;
+            dino.y += dino.dy;
+
+            // Ground collision
+            if (dino.y + dino.height > canvas.height - 10) {
+                dino.y = canvas.height - 10 - dino.height;
+                dino.dy = 0;
+                dino.grounded = true;
+            } else {
+                dino.grounded = false;
+            }
+
+            // Obstacle Logic
+            // Spawn rate increases slightly with speed
+            if (frame % Math.floor(1000 / gameSpeed) === 0 || frame === 1) {
+                // Random chance to spawn, prevents perfect rhythm
+                if(Math.random() > 0.3) spawnObstacle();
+            }
+
+            // Move and Check Obstacles
+            for (let i = obstacles.length - 1; i >= 0; i--) {
+                let obs = obstacles[i];
+                obs.x -= gameSpeed;
+
+                // Collision Detection (AABB)
+                // Reduced hitbox slightly for better feel with sprites
+                if (
+                    dino.x + 5 < obs.x + obs.width - 5 &&
+                    dino.x + dino.width - 5 > obs.x + 5 &&
+                    dino.y + 5 < obs.y + obs.height &&
+                    dino.y + dino.height > obs.y
+                ) {
+                    gameOver();
+                }
+
+                // Cleanup
+                if (obs.x + obs.width < 0) {
+                    obstacles.splice(i, 1);
+                }
+            }
+
+            // Score
+            score++;
+            updateScoreUI();
+            
+            // Speed progression
+            if (score % 500 === 0) {
+                gameSpeed += 0.5;
+            }
+
+            // Chaos Mode Trigger
+            if (score > CHAOS_THRESHOLD && !isChaosMode) {
+                startChaosMode();
+            }
+
+            // Draw everything
+            drawGround();
+            drawObstacles();
+            drawDino();
+        }
+
+        function jump() {
+            // Logic change: Button only jumps when playing. 
+            // Restart is handled by explicit Restart Button now.
+            if (!isPlaying && isGameOver) {
+                return; 
+            }
+            if (!isPlaying && !isGameOver) {
+                isPlaying = true;
+                update();
+            }
+
+            if (dino.grounded) {
+                dino.dy = JUMP_STRENGTH;
+                dino.grounded = false;
+            }
+
+            // THE MECHANIC: Move button on every jump
+            moveButtonRandomly();
+        }
+
+        // --- Chaos Mechanics ---
+
+        function moveButtonRandomly() {
+            // Responsive Calculation: Use container dimensions strictly
+            const containerW = container.clientWidth;
+            const containerH = container.clientHeight;
+            
+            const btnW = jumpBtn.offsetWidth || 100; // fallback safety
+            const btnH = jumpBtn.offsetHeight || 50;
+
+            const maxX = containerW - btnW - 20; // 20px buffer
+            const maxY = containerH - btnH - 20;
+
+            const randomX = Math.max(20, Math.random() * maxX);
+            const randomY = Math.max(20, Math.random() * maxY);
+
+            jumpBtn.style.left = `${randomX}px`;
+            jumpBtn.style.top = `${randomY}px`;
+            jumpBtn.style.transform = 'none'; // Remove centering transform once moved
+        }
+
+        function startChaosMode() {
+            isChaosMode = true;
+            document.body.classList.add('chaos-active');
+            
+            // Auto move every 2 seconds
+            chaosInterval = setInterval(() => {
+                if(isPlaying) moveButtonRandomly();
+            }, AUTO_MOVE_INTERVAL);
+        }
+
+        function stopChaosMode() {
+            isChaosMode = false;
+            document.body.classList.remove('chaos-active');
+            if (chaosInterval) clearInterval(chaosInterval);
+        }
+
+        function updateScoreUI() {
+            let scoreStr = score.toString().padStart(5, '0');
+            let highStr = highScore.toString().padStart(5, '0');
+            scoreBoard.innerText = `HI ${highStr} ${scoreStr}`;
+        }
+
+        function gameOver() {
+            isPlaying = false;
+            isGameOver = true;
+            if (score > highScore) highScore = score;
+            
+            // SHOW FINAL SCORE
+            finalScoreDisplay.innerText = "SCORE: " + score;
+
+            stopChaosMode();
+            gameOverScreen.style.display = 'flex';
+            
+            // Center Jump button again (mostly aesthetic here)
+            jumpBtn.style.top = '50%';
+            jumpBtn.style.left = '50%';
+            jumpBtn.style.transform = 'translate(-50%, -50%)';
+        }
+
+        function resetGame() {
+            isGameOver = false;
+            score = 0;
+            frame = 0;
+            gameSpeed = 6;
+            obstacles = [];
+            gameOverScreen.style.display = 'none';
+            messageArea.style.display = 'none';
+            
+            // Reset position
+            resizeCanvas(); // Ensure correct height calc
+            dino.y = canvas.height - dino.height - 10;
+            dino.dy = 0;
+            
+            stopChaosMode();
+            
+            isPlaying = true;
+            update();
+            
+            // Immediate first jump on restart
+            dino.dy = JUMP_STRENGTH;
+            moveButtonRandomly();
+        }
+
+        // --- Input Handling ---
+
+        // Universal trigger function for both mouse and touch
+        const handleInteraction = (e) => {
+            if (e.type === 'touchstart') e.preventDefault();
+            e.stopPropagation();
+            jump();
+        };
+        
+        const handleRestart = (e) => {
+            if (e.type === 'touchstart') e.preventDefault();
+            e.stopPropagation();
+            resetGame();
+        };
+
+        // Jump Button
+        jumpBtn.addEventListener('mousedown', handleInteraction);
+        jumpBtn.addEventListener('touchstart', handleInteraction, { passive: false });
+
+        // Restart Button
+        restartBtn.addEventListener('mousedown', handleRestart);
+        restartBtn.addEventListener('touchstart', handleRestart, { passive: false });
+
+        // The Twist: Disable Spacebar
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                e.preventDefault();
+                messageArea.style.display = 'block';
+                messageArea.innerText = "NO SPACEBAR! CLICK THE BUTTON!";
+                
+                // Shake the button to draw attention
+                jumpBtn.style.transform += ' rotate(5deg)';
+                setTimeout(() => {
+                     jumpBtn.style.transform = jumpBtn.style.transform.replace(' rotate(5deg)', '');
+                }, 100);
+            }
+        });
+
+        // Initial draw
+        resizeCanvas();
+        // Wait briefly for images to parse (though data URIs are usually instant)
+        dinoImg.onload = () => {
+             drawGround();
+             drawDino();
+        };
+
+    </script>
+</body>
+</html>

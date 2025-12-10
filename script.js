@@ -36,6 +36,13 @@ const projectsData = [
         repo: "https://github.com/GoulartNogueira/BadUI"
     },
     {
+        title: "Chaos Jump Dino",
+        image: "Projects\\dino\\dino.gif",
+        description: "The Button: It teleports instantly upon clicking.",
+        link: "\\Projects\\dino\\index.html",
+        repo: "https://github.com/GoulartNogueira/BadUI"
+    },
+    {
         title: "Birth Selector",
         image: "https://goulartnogueira.github.io/BadUI/Date/Date.gif",
         description: "A birth date tool that refuses to behave.",
