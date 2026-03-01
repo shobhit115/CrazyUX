@@ -1,4 +1,4 @@
-# CrazyUX – Crazy User Experience Neomorphic UI Website
+# CrazyUX - Crazy User Experience
 
 ## Overview
 CrazyUX is a creative and experimental web project built to showcase funny, quirky, and unconventional UI/UX designs.  
